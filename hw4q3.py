@@ -15,9 +15,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler, normalize
 
 ######################################### Reading and Splitting the Data ###############################################
-# XXX
 # TODO: Read in all the data. Replace the 'xxx' with the path to the data set.
-# XXX
 data = pd.read_csv('seizure_dataset.csv')
 
 # Separate out the x_data and y_data.
@@ -27,28 +25,38 @@ y_data = data.loc[:, "y"]
 # The random state to use while splitting the data.
 random_state = 100
 
-# XXX
+
 # TODO: Split 70% of the data into training and 30% into test sets. Call them x_train, x_test, y_train and y_test.
 # Use the train_test_split method in sklearn with the paramater 'shuffle' set to true and the 'random_state' set to 100.
-# XXX
+x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, random_state=100, shuffle=True, train_size=0.7, test_size=None)
 
 
 # ############################################### Linear Regression ###################################################
-# XXX
 # TODO: Create a LinearRegression classifier and train it.
-# XXX
 
-# XXX
+reg = LinearRegression().fit(x_train, y_train)
+
+
 # TODO: Test its accuracy (on the training set) using the accuracy_score method.
 # TODO: Test its accuracy (on the testing set) using the accuracy_score method.
 # Note: Use y_predict.round() to get 1 or 0 as the output.
-# XXX
+print("Linear Regression")
+
+y_pred_train = reg.predict(x_train).round()
+reg_train_accu = (accuracy_score(y_train, y_pred_train)*100).round()
+print("Training Accuracy: ", str(reg_train_accu))
+
+y_pred_test = reg.predict(x_test).round()
+reg_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
+print("Testing Accuracy: ", str(reg_test_accu))
 
 
 # ############################################### Multi Layer Perceptron #################################################
 # XXX
 # TODO: Create an MLPClassifier and train it.
 # XXX
+print("MLP")
+mlp = MLPClassifier(random_state=100).fit(x_train, y_train)
 
 
 # XXX
@@ -56,20 +64,35 @@ random_state = 100
 # TODO: Test its accuracy on the test set using the accuracy_score method.
 # XXX
 
+y_pred_train = mlp.predict(x_train)
+mlp_train_accu = (accuracy_score(y_train, y_pred_train)*100).round()
+print("Training Accuracy: ", str(mlp_train_accu))
 
-
+y_pred_test = mlp.predict(x_test)
+mlp_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
+print("Testing Accuracy: ", str(mlp_test_accu))
 
 
 # ############################################### Random Forest Classifier ##############################################
 # XXX
 # TODO: Create a RandomForestClassifier and train it.
 # XXX
+print("Random Forests Classifier")
+rfc = RandomForestClassifier(random_state=100).fit(x_train, y_train)
 
 
-# XXX
 # TODO: Test its accuracy on the training set using the accuracy_score method.
 # TODO: Test its accuracy on the test set using the accuracy_score method.
-# XXX
+
+y_pred_train = rfc.predict(x_train)
+rfc_train_accu = (accuracy_score(y_train, y_pred_train)*100).round()
+print("Training Accuracy: ", str(rfc_train_accu))
+
+y_pred_test = rfc.predict(x_test)
+rfc_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
+print("Testing Accuracy: ", str(rfc_test_accu))
+
+
 
 # XXX
 # TODO: Tune the hyper-parameters 'n_estimators' and 'max_depth'.
@@ -78,19 +101,40 @@ random_state = 100
 
 
 # ############################################ Support Vector Machine ###################################################
-# XXX
+print("SVM")
 # TODO: Pre-process the data to standardize or normalize it, otherwise the grid search will take much longer
+scaler = StandardScaler().fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+
+
 # TODO: Create a SVC classifier and train it.
-# XXX
+svm = SVC(random_state=100, gamma='auto').fit(x_train, y_train)
+
 
 # XXX
 # TODO: Test its accuracy on the training set using the accuracy_score method.
 # TODO: Test its accuracy on the test set using the accuracy_score method.
-# XXX
+y_pred_train = svm.predict(x_train)
+svm_train_accu = (accuracy_score(y_train, y_pred_train)*100).round()
+print("Training Accuracy: ", str(svm_train_accu))
+
+y_pred_test = svm.predict(x_test)
+svm_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
+print("Testing Accuracy: ", str(svm_test_accu))
+
 
 # XXX
 # TODO: Tune the hyper-parameters 'C' and 'kernel' (use rbf and linear).
 #       Print the best params, using .best_params_, and print the best score, using .best_score_.
-# XXX
+svm_hp = SVC(random_state=100, gamma='scale').fit(x_train, y_train)
+print("SVM Hyper-parameters")
+parameters = {'kernel': ['linear', 'rbf'], 'C': [0.01, 1, 100]}
+grid = GridSearchCV(svm_hp, parameters, cv=10, n_jobs=-1, refit=True).fit(x_train, y_train)
+print(grid.best_params_)
+print(grid.best_score_)
 
+y_pred_test = svm_hp.predict(x_test)
+svm_hp_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
+print("Testing Accuracy: ", str(svm_hp_test_accu))
 
