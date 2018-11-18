@@ -97,7 +97,22 @@ print("Testing Accuracy: ", str(rfc_test_accu))
 # XXX
 # TODO: Tune the hyper-parameters 'n_estimators' and 'max_depth'.
 #       Print the best params, using .best_params_, and print the best score, using .best_score_.
-# XXX
+# print("Random Forest Hyper-parameters")
+#
+# param_grid = {
+#     'max_depth': [80, 90, 100],
+#     'n_estimators': [100, 200, 300]
+# }
+# # Create a based model
+# rf = RandomForestClassifier()
+# # Instantiate the grid search model
+# grid_rfc_hp = GridSearchCV(rf, param_grid=param_grid, cv=10, n_jobs=-1, verbose=1).fit(x_train, y_train)
+# print(grid_rfc_hp.best_params_)
+#
+# y_pred_test = grid_rfc_hp.predict(x_test)
+# grid_rfc_hp_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
+# print("Testing Accuracy: ", str(grid_rfc_hp_test_accu))
+
 
 
 # ############################################ Support Vector Machine ###################################################
@@ -130,11 +145,11 @@ print("Testing Accuracy: ", str(svm_test_accu))
 svm_hp = SVC(random_state=100, gamma='scale').fit(x_train, y_train)
 print("SVM Hyper-parameters")
 parameters = {'kernel': ['linear', 'rbf'], 'C': [0.01, 1, 100]}
-grid = GridSearchCV(svm_hp, parameters, cv=10, n_jobs=-1, refit=True).fit(x_train, y_train)
-print(grid.best_params_)
-print(grid.best_score_)
+grid_svm_hp = GridSearchCV(svm_hp, parameters, cv=10, n_jobs=-1, refit=True, verbose=1).fit(x_train, y_train)
+# print(grid_svm_hp.best_params_)
+# print(grid_svm_hp.best_score_)
+# print(grid_svm_hp.cv_results_)
 
-y_pred_test = svm_hp.predict(x_test)
-svm_hp_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
-print("Testing Accuracy: ", str(svm_hp_test_accu))
-
+y_pred_test = grid_svm_hp.predict(x_test)
+grid_svm_hp_test_accu = (accuracy_score(y_test, y_pred_test)*100).round()
+print("Testing Accuracy: ", str(grid_svm_hp_test_accu))

@@ -21,16 +21,16 @@ Random Forest -
 Q3.2 - Hyperparameter tuning
 
 Random Forest -
-	n_estimators values tested (at least 3):
+	n_estimators values tested (at least 3): 100, 200, 300
 
-	max_depth values tested (at least 3):
+	max_depth values tested (at least 3): 80, 90, 100
 
 	Best combination of parameter values:
-		n_estimators:
-		max_depth:
+		n_estimators: 200
+		max_depth: 90
 
 	Testing Accuracy before tuning (default parameters): 95%
-	Testing Accuracy after tuning:
+	Testing Accuracy after tuning: 96%
 
 
 SVM -
